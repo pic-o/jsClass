@@ -98,11 +98,10 @@ additional notes:
 			//"use strict"; //strict mode does not allow caller calls, lol
 			
 			//Gets the function caller for _super()
-			var _caller = null;
 			
 			//Non working, over the top version, lol
 			//_caller = (arguments && ( arguments.caller || (arguments.callee && arguments.callee.caller))) || (_super && ( _super.caller || (_super.arguments && _super.arguments.caller)));
-			_caller = ((_super && _super.caller) || (arguments && ( arguments.caller || (arguments.callee && arguments.callee.caller))) );
+			var _caller  = ((_super && _super.caller) || (arguments && ( arguments.caller || (arguments.callee && arguments.callee.caller))) );
 			
 			if(_caller === null) {
 				throw( new TypeError("Class._super(): Failed to get calling function : Caller fetch not supported!") );

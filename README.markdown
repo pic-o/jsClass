@@ -1,5 +1,5 @@
-jsCompatible
-============
+jsClass
+=======
 Provides class functionalities for javascript
 
 
@@ -11,8 +11,8 @@ Usage
 -----
 Just include it inside your html/php file, before any other .js file.
 
-> `<script type="text/javascript" src="jsCompatible.js"></script>`
-> `<script type="text/javascript" src="jsClass.js"></script>`
+	`<script type="text/javascript" src="jsCompatible.js"></script>`
+	`<script type="text/javascript" src="jsClass.js"></script>`
 
 Example?
 --------
@@ -66,6 +66,8 @@ Example?
 
 Short-Story
 -----------
+For the more detailed version, visit [http://pic-o.com/blog/2011/08/jsclass/]
+
 This was heavily influenced by John Resig javascript wonderfully done class system [http://ejohn.org/blog/simple-javascript-inheritance/]. However i felt many things were unneeded (personal oppinion), from initializing a shared boolean flags (that i suspect might break in multi-core javascript future), to the attachment of super functions, instead of a dynamic _super call (that still works when the parent function gets changed).
 
 With heavy experimentation, this substitude version was created.
