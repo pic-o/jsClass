@@ -16,52 +16,53 @@ Just include it inside your html/php file, before any other .js file.
 
 Example?
 --------
->	var testClass = Class._extend( {
-		
->		"_init" : function( ext ) { 
 
->			//This is the constructor, default value + ext?
-			
->			this.attribute = this.attribute + ext; 
+	var testClass = Class._extend( {
 		
->		},
+		"_init" : function( ext ) { 
+
+			//This is the constructor, default value + ext?
+			
+			this.attribute = this.attribute + ext; 
+		
+		},
 		
 		 
->		
->		//attributes/properties
 		
->		"test" : function() { 
->			console.log(arguments); 
->		},
+		//attributes/properties
 		
->		"attribute" : "hello",
-	
->	} );
-	
->
->	var c = new testClass( " world" );
-	
->	c.test( c.attribute );
-	
->
->	var extClass = testClass._extend( {
+		"test" : function() { 
+			console.log(arguments); 
+		},
 		
->		"test" : function() { this._super( "Good Bye" ); }
+		"attribute" : "hello",
 	
->	} );
+	} );
 	
->
->	var e = new extClass();
+
+	var c = new testClass( " world" );
 	
->	e.test();
+	c.test( c.attribute );
 	
-	
->
->	if( e instanceof testClass && extClass.prototype instanceof Class ) {
+
+	var extClass = testClass._extend( {
 		
->		console.log('instance of works');
+		"test" : function() { this._super( "Good Bye" ); }
 	
->	}
+	} );
+	
+
+	var e = new extClass();
+	
+	e.test();
+	
+	
+
+	if( e instanceof testClass && extClass.prototype instanceof Class ) {
+		
+		console.log('instance of works');
+	
+	}
 
 Short-Story
 -----------
@@ -77,16 +78,16 @@ Syntax?
 -------
 When _extend / extending classes, note the following in your class object :
 
-> _init : 	This is a constructor function
-> this._super:	Works just like normal super() calls.
++ _init : 	This is a constructor function
++ this._super:	Works just like normal super() calls.
 
 Additionally, the _extend function has other uses (which i do not gurentee)
 
-> Class._extend( [prop], [extFrom], [notStrict] ) ...
-> 
-> [prop] :	Object to pass, to use as class properties.
-> [extFrom] :	Object / Class function to extend from.
-> [notStrict] :	Set to true, if the [extFrom] is not a 'Class' object. (it will throw an error otherwise)
++ Class._extend( [prop], [extFrom], [notStrict] ) ...
++ 
++ [prop] :Object to pass, to use as class properties.
++ [extFrom] :	Object / Class function to extend from.
++ [notStrict] :	Set to true, if the [extFrom] is not a 'Class' object. (it will throw an error otherwise)
 
 License?
 --------
@@ -101,7 +102,8 @@ cc by (CreativeCommons Attribution licenses)
 [http://creativecommons.org/licenses/by/3.0/]
 ### cc notes:
 + Crediting me (Eugene Cheah AKA picoCreator) is required for derivatives of this work, UNLESS...
-+ An exception is given for using this on a live website, (eg, using this for your blog in the background) in which crediting every single source file directly may be impractical (even for commercial sites). 
++ An exception is given for using this on a live website, (eg, using this for your blog in the background) 
+in which crediting every single source file directly may be impractical (even for commercial sites). 
 However this exception is only given if you drop me an email, with the link to deployment.
 + This exception however does not hold in any source release of which this code is used (Its stated in the cc license btw), hence credit should be given in this case.
 + These license requirments would be applied to all forks / merges / derivatives, of this work.
