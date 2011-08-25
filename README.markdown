@@ -2,7 +2,7 @@ jsCompatible
 ============
 Provides class functionalities for javascript
 
-.
+
 
 Please ensure jsCompatible, is loaded prior to this script, to make this cross-client safe 
 [http://pic-o.com/blog/2011/08/jscompatible/]
