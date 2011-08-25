@@ -7,6 +7,7 @@ source code
 Provides class functionalities for javascript
 
 Please ensure jsCompatible, is loaded prior to this script, to make this cross-client safe
+[http://pic-o.com/blog/2011/08/jscompatible/]
 
 -Usage:
 	var testClass = Class._extend( {
@@ -30,7 +31,21 @@ Please ensure jsCompatible, is loaded prior to this script, to make this cross-c
 	if( e instanceof testClass && extClass.prototype instanceof Class ) {
 		console.log('instance of works');
 	}
-	
+
+-Syntax?:
+	When _extend / extending classes, note the following in your class object :
+
+	> _init : 	This is a constructor function
+	> this._super:	Works just like normal super() calls.
+
+	Additionally, the _extend function has other uses (which i do not gurentee)
+
+	> Class._extend( [prop], [extFrom], [notStrict] ) ...
+	> 
+	> [prop] :	Object to pass, to use as class properties.
+	> [extFrom] :	Object / Class function to extend from.
+	> [notStrict] :	Set to true, if the [extFrom] is not a 'Class' object. (it will throw an error otherwise)
+
 -Main refrences:
 http://ejohn.org/blog/simple-javascript-inheritance/
 
@@ -45,10 +60,17 @@ email:		pico.creator@gmail.com
 website:	blog.pic-o.com
 copyright:	cc by [CreativeCommons Attribution licenses]
 			http://creativecommons.org/licenses/by/3.0/
-cc notes:	While crediting me (picoCreator) is required for derivatives of this work, i do give an exception for using this on a live website, 
-			(eg, using this for your blog in the background) in which crediting every single file is impractical (even for commercial sites).
-			Though i request you do drop an email if you use this for a live site (for my curiosity, to see where this code goes)
-			I do request however credit to be given in open source release of which this code is used (Its stated in the cc license btw)
+
+cc notes:	
+	+ Crediting me (Eugene Cheah AKA picoCreator) is required for derivatives of this work, UNLESS...
+	+ An exception is given for using this on a live website, (eg, using this for your blog in the background) in which crediting every single source file directly may be impractical (even for commercial sites). 
+	However this exception is only given if you drop me an email, with the link to deployment.
+	+ This exception however does not hold in any source release of which this code is used (Its stated in the cc license btw), hence credit should be given in this case.
+	+ These license requirments would be applied to all forks / merges / derivatives, of this work.
+
+additional notes:
+	+ I may update to add an additional open source licenses in the future / on requested =)
+	+ Remember to drop an email if you are using this for a live site, ty. (for my curiosity, to see where this code goes)
 **********************************************************************************************************************************************************/
 
 /*****************************************
