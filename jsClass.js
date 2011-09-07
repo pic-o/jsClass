@@ -2,7 +2,7 @@
 source code
 -name:	jsClass
 -type: 	javascript	: global self loading script (Not JSON-Script compliant)
--vers:	Beta 1 (02 Aug 2011)
+-vers:	Beta 1.01 (07 Sept 2011)
 -Discription:
 Provides class functionalities for javascript
 
@@ -48,6 +48,10 @@ Please ensure jsCompatible, is loaded prior to this script, to make this cross-c
 
 -Main refrences:
 http://ejohn.org/blog/simple-javascript-inheritance/
+
+-Change log
+
+Beta 1.01 :	07 Sept 2011	: Allow constructors to overide the return value, by returning a non-null value.
 
 -ToDo:
 -future suggestion:
@@ -208,7 +212,8 @@ additional notes:
 				//Calls the init() function if it exists
 				if( this["_init"] !== null && typeof(this["_init"]) === "function" ) {
 					//console.log("runinit");
-					return (this["_init"]).apply( this, arguments );
+					var _ret = (this["_init"]).apply( this, arguments );
+					if(_ret) { return _ret; }
 				}
 				return this;
 			};
