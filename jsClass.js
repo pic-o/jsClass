@@ -2,7 +2,7 @@
 source code
 -name:	jsClass
 -type: 	javascript	: global self loading script (Not JSON-Script compliant)
--vers:	Beta 1.01 (07 Sept 2011)
+-vers:	Beta 1.3 (27 Decm 2011)
 -Discription:
 Provides class functionalities for javascript
 
@@ -44,13 +44,15 @@ Please ensure jsCompatible, is loaded prior to this script, to make this cross-c
 	> 
 	> [prop] :	Object to pass, to use as class properties.
 	> [extFrom] :	Object / Class function to extend from.
-	> [notStrict] :	Set to true, if the [extFrom] is not a 'Class' object. (it will throw an error otherwise)
+	> [notStrict] :	Set to true, if the [extFrom] is not a 'Class' object / function. 
+					(it will throw an error otherwise)
 
 -Main refrences:
 http://ejohn.org/blog/simple-javascript-inheritance/
 
 -Change log
-
+Beta 1.30 : 27 Decm 2011	: Fixed the bug again (in deeper nested _super calls)
+Beta 1.20 : 24 Decm 2011	: Fixed an _origin bug on nested _super calls
 Beta 1.01 :	07 Sept 2011	: Allow constructors to overide the return value, by returning a non-null value.
 
 -ToDo:
@@ -67,11 +69,11 @@ copyright:	cc by [CreativeCommons Attribution licenses]
 
 cc notes:	
 	+ Crediting me (Eugene Cheah AKA picoCreator) is required for derivatives of this work, UNLESS...
-	+ An exception is given for using this on a live website, (eg, using this for your blog in the background) in which crediting every single source file directly may be impractical (even for commercial sites). 
+	+ An exception is given for using this on a live deployment, (eg, using this for your blog in the background) in which crediting every single page may be impractical (even for commercial sites). 
 	However this exception is only given if you drop me an email, with the link to deployment.
 	+ This exception however does not hold in any source release of which this code is used (Its stated in the cc license btw), hence credit should be given in this case.
 	+ These license requirments would be applied to all forks / merges / derivatives, of this work.
-
+	
 additional notes:
 	+ I may update to add an additional open source licenses in the future / on requested =)
 	+ Remember to drop an email if you are using this for a live site, ty. (for my curiosity, to see where this code goes)
@@ -114,16 +116,19 @@ additional notes:
 			//Finds teh caller name
 			var _callName = null;
 			
+			var _origin = this; //pesky line number bug -.-"
+			
 			//Gets the object in the prototype chain which called _super() [Search Function]
 			while( _callName === null ) {
-				for( var p in this ) {
-					if(this[p] == _caller) {
+				for( var p in _origin ) {
+					if(_origin[p] == _caller) {
 						_callName = p;
 					}
 				}
 				
 				if( _callName === null ) { //try again?: it maybe a nested _super
 					_origin = Object.getPrototypeOf( _origin );
+					
 					if( _origin === null) {
 						throw( new TypeError("Class._super(): calling function not found in Class Object") );
 						return;
@@ -132,7 +137,6 @@ additional notes:
 			}
 			
 			//Gets the prototype object
-			var _origin = this;
 			var _proto = null;
 			while( _proto === null ) {
 				if( _origin.hasOwnProperty( _callName ) && _origin[_callName] == _caller ) {
@@ -158,46 +162,72 @@ additional notes:
 	
 	/**
 	* Extends a Class from its object, or Constructor prototype object.
+	* [extFrom] should be the class function, or its prototype object to inherit from
 	* Set notStrict = true, to skip check if derived Object is not instanceof Class.
 	**/
 	if(!Class._extend) {
 		Class._extend = function( prop, extFrom, notStrict ) {
 			//"use strict"; //strict mode
 			if(!extFrom) { 
-				//Extends from self by default, else extends from class
-				if( this.prototype && this.prototype instanceof Class) { //Class function
-					extFrom = this.prototype; //Uses function proto as ref
-				} else if(this instanceof Class || this === Class) { //Class object
-					extFrom = this; //Uses object as ref
+				extFrom = this;	
+			} 
+			
+			//console.warn( prop.n, 'a', extFrom.prototype );
+			
+			//Extracts the prototype object to extend from
+			if(extFrom instanceof Class || extFrom === Class) { //Class object
+				//Uses object directly as ref
+			} else if( typeof(extFrom) === "function" ) { //Class function
+				if( extFrom.prototype && extFrom.prototype instanceof Class ) {
+					extFrom = this.prototype; //Class function
+				} else if( notStrict ) {
+					extFrom = this.prototype;
 				} else {
-					throw new Error("Class._extend() : Can only run from valid Class Functions, without [extFrom] parameter");
-					return;	//Breaks
-					//extFrom = Class; //Extends from class? (Graceful fallback??)
+					throw new Error("Class._extend() : provided function contains no valid prototype object, use [notStrict] parameter to ignore");
 				}
-				
+			} else if( notStrict ) {
+				extFrom = this; //not strick mode
 			} else {
-				
-				//Its a function (Class) object, gets the "prototype"
-				if( typeof(extFrom) === "function" && extFrom.prototype ) {
+				throw new Error("Class._extend() : Can only run from valid Class Functions / object, without [extFrom / notStrict] parameter");
+				//extFrom = Class; //Extends from class? (Graceful fallback??)
+			}
+			
+			//obsolete??
+			/*
+			//Its a function (Class) object, gets the "prototype"
+			if( typeof(extFrom) === "function" && extFrom.prototype ) {
+				if( extFrom.prototype instanceof Class ) {
 					extFrom = extFrom.prototype;
-				}
-				
-				//Checks if its a valid object
-				if( Object( extFrom ) === extFrom ) {
-					if(!notStrict) {
-						if( !(extFrom === Class || extFrom instanceof Class) ) {
-							//It is not a class object, and strict inheritence is enforced
-							throw( new Error("Class._extend(): Extension target is not a Class object [set notStrict = true, to skip Class check]") );
-							return; //extFrom = Class; //Sets to default Class as a graceful fallback??
-						}
-					}
+				} else if( notStrict ) {
+					extFrom = extFrom.prototype;
 				} else {
-					throw( new Error("Class._extend(): Extension object (or function prototype), Must be atleast an object") );
-					return;
-					//extFrom = Class;
+					throw new Error("Class._extend() : [extFrom] function contains no valid prototype object, use [notStrict] parameter to ignore");
 				}
 			}
 			
+			//Checks if its a valid object
+			if( Object( extFrom ) === extFrom ) {
+				if(!notStrict) { //strict mode
+					if( !(extFrom === Class || extFrom instanceof Class) ) {
+						//It is not a class object, and strict inheritence is enforced
+						throw( new Error("Class._extend(): Extension target is not a Class object [set notStrict = true, to skip Class check]") );
+						return; //extFrom = Class; //Sets to default Class as a graceful fallback??
+					}
+				}
+			} else {
+				throw( new Error("Class._extend(): Extension object (or function prototype), Must be atleast an object") );
+				return;
+				//extFrom = Class;
+			}
+			*/
+			
+			if(!extFrom == null) {
+				if( notStrict ) {
+					extFrom = Class; //silent fallback?
+				} else {
+					throw new Error("Class._extend() : Failed to obtain the extFrom parameter");
+				}
+			}
 			//Inner class obj constructor
 			var _classObj = function() {  
 				
@@ -211,7 +241,6 @@ additional notes:
 				
 				//Calls the init() function if it exists
 				if( this["_init"] !== null && typeof(this["_init"]) === "function" ) {
-					//console.log("runinit");
 					var _ret = (this["_init"]).apply( this, arguments );
 					if(_ret) { return _ret; }
 				}
@@ -222,6 +251,7 @@ additional notes:
 			var proto = function() {};
 			proto.prototype = extFrom;
 			_classObj.prototype = Object.extend( new proto(), prop );
+			
 			//this replace Object.create( extFrom, prop );
 			_classObj._extend = Class._extend;	//Easy _extend function
 
