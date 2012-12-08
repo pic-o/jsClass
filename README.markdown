@@ -18,50 +18,35 @@ Example?
 --------
 
 	var testClass = Class._extend( {
-		
 		"_init" : function( ext ) { 
-
 			//This is the constructor, default value + ext?
-			
 			this.attribute = this.attribute + ext; 
 		
 		},
 		
-		 
-		
 		//attributes/properties
-		
 		"test" : function() { 
 			console.log(arguments); 
 		},
 		
 		"attribute" : "hello",
-	
 	} );
 	
 
 	var c = new testClass( " world" );
-	
 	c.test( c.attribute );
 	
 
 	var extClass = testClass._extend( {
-		
 		"test" : function() { this._super( "Good Bye" ); }
-	
 	} );
 	
 
 	var e = new extClass();
-	
 	e.test();
 	
-	
-
 	if( e instanceof testClass && extClass.prototype instanceof Class ) {
-		
 		console.log('instance of works');
-	
 	}
 
 Short-Story
@@ -105,8 +90,7 @@ cc by (CreativeCommons Attribution licenses)
 ### cc notes:
 + Crediting me (Eugene Cheah AKA picoCreator) is required for derivatives of this work, UNLESS...
 + An exception is given for using this on a live website, (eg, using this for your blog in the background) 
-in which crediting every single source file directly may be impractical (even for commercial sites). 
-However this exception is only given if you drop me an email, with the link to deployment.
+when using the code in its relatively unmodified form (code compression allowed)
 + This exception however does not hold in any source release of which this code is used (Its stated in the cc license btw), hence credit should be given in this case.
 + These license requirments would be applied to all forks / merges / derivatives, of this work.
 
